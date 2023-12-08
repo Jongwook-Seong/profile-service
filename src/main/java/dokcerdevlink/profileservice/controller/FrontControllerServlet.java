@@ -1,5 +1,7 @@
 package dokcerdevlink.profileservice.controller;
 
+import dokcerdevlink.profileservice.controller.view.ViewRenderer;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,10 +35,13 @@ public class FrontControllerServlet extends HttpServlet {
         Map<String, Object> model = new HashMap<>();
 
         String viewName = controller.process(paramMap, model);
+
+        ViewRenderer viewRenderer = viewResolver(viewName);
+        viewRenderer.render(model, request, response);
     }
 
-    private static view viewResolver(String viewName) {
-        return new view("/WEB-INF/views/" + viewName + "");
+    private static ViewRenderer viewResolver(String viewName) {
+        return new ViewRenderer("/WEB-INF/views/" + viewName);
     }
 
     private static Map<String, String> createParamMap(HttpServletRequest request) {
