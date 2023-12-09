@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -34,21 +35,17 @@ public class ProfileController {
         return myProfileDto;
     }
 
-//    @PostMapping("/api/profile")
-//    public MyProfileDto editMyProfile(@ModelAttribute MyProfileDto myProfileDto) {
-//
-//        Model model;
-//        model.getAttribute()
-//        MyProfileDto dto = new MyProfileDto(10L, "a", "a", "a", "a", "a", "a");
-//        //profileService.saveMyProfile(myProfileDto);
-//        profileService.saveMyProfile(dto);
-//        return dto;
-//    }
-
     @PostMapping("/api/profile")
-    public ResponseEntity<Profile> editMyProfile(@RequestBody Profile profile) {
+    public MyProfileDto editMyProfile(@RequestBody HashMap<String, Object> jsonObject) {
+        String imageUrl = jsonObject.get("imageUrl").toString();
+        String name = jsonObject.get("name").toString();
+        String nickname = jsonObject.get("nickname").toString();
+        String introduction = jsonObject.get("introduction").toString();
+        String stacks = jsonObject.get("stacks").toString();
+        String address = jsonObject.get("address").toString();
 
-        profileService.save(profile);
-        return new ResponseEntity<>(profile, HttpStatus.CREATED);
+        MyProfileDto myProfileDto = new MyProfileDto(10L, imageUrl, name, nickname, introduction, stacks, address);
+        profileService.saveMyProfile(myProfileDto);
+        return myProfileDto;
     }
 }
