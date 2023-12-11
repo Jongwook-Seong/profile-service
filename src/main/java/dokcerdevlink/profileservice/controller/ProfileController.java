@@ -25,18 +25,37 @@ public class ProfileController {
     }
 
     /** 마이페이지 **/
-    @GetMapping("/api/profile")
-    public MyProfileDto showProfilePage() { //Model model
-//        List<ProfileDto> profileDtos = profileService.showProfile();
-//        model.addAttribute("profileDtos", profileDtos);
-
-        Long profileId = 1L;
-        MyProfileDto myProfileDto = profileService.showMyPageProfile(profileId);
-        return myProfileDto;
-    }
+//    @GetMapping("/api/profile")
+//    public MyProfileDto showMyProfilePage() { //Model model
+////        List<ProfileDto> profileDtos = profileService.showProfile();
+////        model.addAttribute("profileDtos", profileDtos);
+//
+//        Long profileId = 1L;
+//        MyProfileDto myProfileDto = profileService.showMyPageProfile(profileId);
+//        return myProfileDto;
+//    }
 
     @PostMapping("/api/profile")
     public MyProfileDto editMyProfile(@RequestBody HashMap<String, Object> jsonObject) {
+        MyProfileDto myProfileDto = convertJsonToMyProfileDto(jsonObject);
+        profileService.saveMyProfile(myProfileDto);
+        return myProfileDto;
+    }
+
+    @GetMapping("/api/profile")
+    public ProfileDto viewProfilePage(@RequestParam("profileUuid") String profileUuid, @RequestHeader("userUuid") String userUuid) {
+//        ProfileDto profileDto = profileService.getProfileByProfileUuid(profileUuid);
+        ProfileDto profileDto = profileService.getProfileByProfileAndUserUuid(profileUuid, userUuid);
+        return profileDto;
+    }
+
+    @GetMapping("/api/profile/list")
+    public List<ProfileDto> viewProfilePage(@RequestParam("keyword") String listKeyword) {
+        List<ProfileDto> profileListByKeyword = profileService.getProfileListByKeyword(listKeyword);
+        return profileListByKeyword;
+    }
+
+    private static MyProfileDto convertJsonToMyProfileDto(HashMap<String, Object> jsonObject) {
         String imageUrl = jsonObject.get("imageUrl").toString();
         String name = jsonObject.get("name").toString();
         String nickname = jsonObject.get("nickname").toString();
@@ -44,8 +63,6 @@ public class ProfileController {
         String stacks = jsonObject.get("stacks").toString();
         String address = jsonObject.get("address").toString();
 
-        MyProfileDto myProfileDto = new MyProfileDto(10L, imageUrl, name, nickname, introduction, stacks, address);
-        profileService.saveMyProfile(myProfileDto);
-        return myProfileDto;
+        return new MyProfileDto(10L, imageUrl, name, nickname, introduction, stacks, address);
     }
 }

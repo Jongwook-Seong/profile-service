@@ -18,6 +18,8 @@ public class Profile {
     @Id @GeneratedValue
     @Column(name = "profile_id")
     private Long id;
+    @Column(name = "profile_uuid")
+    private String profileUuid;
     @Column(name = "user_uuid")
     private String userUuid;
     @Column(name = "image_url")
@@ -42,6 +44,17 @@ public class Profile {
     }
 
     public Profile(String imageUrl, String name, String nickname, String introduction, String stacks, String address) {
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.nickname = nickname;
+        this.introduction = introduction;
+        this.stacks = stacks;
+        this.address = address;
+    }
+
+    public Profile(String profileUuid, String userUuid, String imageUrl, String name, String nickname, String introduction, String stacks, String address) {
+        this.profileUuid = profileUuid;
+        this.userUuid = userUuid;
         this.imageUrl = imageUrl;
         this.name = name;
         this.nickname = nickname;

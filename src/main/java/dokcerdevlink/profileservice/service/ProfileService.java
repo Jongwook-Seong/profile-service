@@ -22,6 +22,8 @@ public class ProfileService {
     public ProfileService(ProfileRepository profileRepository) {
         this.profileRepository = profileRepository;
 
+        String profileUuid = "123";
+        String userUuid = "456";
         String imageUrl = "http://hello";
         String name = "kim";
         String nickname = "kkk";
@@ -29,7 +31,7 @@ public class ProfileService {
         String stacks = "#java #spring";
         String address = "incheon gyeyang";
 
-        Profile profile = new Profile(imageUrl, name, nickname, introduction, stacks, address);
+        Profile profile = new Profile(profileUuid, userUuid, imageUrl, name, nickname, introduction, stacks, address);
         profileRepository.save(profile);
     }
 
@@ -44,10 +46,25 @@ public class ProfileService {
 //        return profileRepository.findByNickname(nickname);
 //    }
 
-    public List<ProfileDto> showProfile() {
-        List<ProfileDto> profileDtos = profileRepository.findProfileDto();
-        return profileDtos;
+    public ProfileDto getProfileByProfileUuid(String profileUuid) {
+        ProfileDto byProfileUuid = profileRepository.findByProfileUuid(profileUuid);
+        return byProfileUuid;
     }
+
+    public ProfileDto getProfileByProfileAndUserUuid(String profileUuid, String userUuid) {
+        ProfileDto byUuid = profileRepository.findByProfileAndUserUuid(profileUuid, userUuid);
+        return byUuid;
+    }
+
+    public List<ProfileDto> getProfileListByKeyword(String keyword) {
+        List<ProfileDto> profilesByStackKeyword = profileRepository.findProfilesByStackKeyword(keyword);
+        return profilesByStackKeyword;
+    }
+
+//    public List<ProfileDto> showProfile() {
+//        List<ProfileDto> profileDtos = profileRepository.findProfileDto();
+//        return profileDtos;
+//    }
 
     public MyProfileDto showMyPageProfile(Long id) {
         MyProfileDto myProfileDtoById = profileRepository.findMyProfileDtoById(id);
