@@ -1,6 +1,5 @@
 package dokcerdevlink.profileservice.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dokcerdevlink.profileservice.dto.MyProfileDto;
 import dokcerdevlink.profileservice.dto.ProfileDto;
 import dokcerdevlink.profileservice.entity.Profile;
@@ -9,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-//import javax.persistence.EntityManager;
-//import javax.persistence.PersistenceContext;
 
 @Service
 public class ProfileService {
@@ -22,6 +18,7 @@ public class ProfileService {
     public ProfileService(ProfileRepository profileRepository) {
         this.profileRepository = profileRepository;
 
+        // 테스트용
         String profileUuid = "123";
         String userUuid = "456";
         String imageUrl = "http://hello";
@@ -34,17 +31,6 @@ public class ProfileService {
         Profile profile = new Profile(profileUuid, userUuid, imageUrl, name, nickname, introduction, stacks, address);
         profileRepository.save(profile);
     }
-
-//    public List<ProfileDto> getAllProfiles() {
-//        return profileRepository.findAllById();
-//    }
-
-//    public Profile getAllProfiles(String nickname) {
-//        Profile profile = new Profile();
-//        profile.setNickname(nickname);
-//        profileRepository.save(nickname);
-//        return profileRepository.findByNickname(nickname);
-//    }
 
     public ProfileDto getProfileByProfileUuid(String profileUuid) {
         ProfileDto byProfileUuid = profileRepository.findByProfileUuid(profileUuid);
@@ -61,12 +47,7 @@ public class ProfileService {
         return profilesByStackKeyword;
     }
 
-//    public List<ProfileDto> showProfile() {
-//        List<ProfileDto> profileDtos = profileRepository.findProfileDto();
-//        return profileDtos;
-//    }
-
-    public MyProfileDto showMyPageProfile(Long id) {
+    public MyProfileDto getMyPageProfile(Long id) {
         MyProfileDto myProfileDtoById = profileRepository.findMyProfileDtoById(id);
         return myProfileDtoById;
     }
@@ -79,5 +60,9 @@ public class ProfileService {
 
         Profile profile = myProfileDto.convertToEntity();
         profileRepository.save(profile);
+    }
+
+    public void deleteProfileByProfileAndUserUuid(String profileUuid, String userUuid) {
+        profileRepository.deleteByProfileAndUserUuid(profileUuid, userUuid);
     }
 }

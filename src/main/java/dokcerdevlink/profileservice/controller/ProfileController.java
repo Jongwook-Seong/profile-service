@@ -2,12 +2,8 @@ package dokcerdevlink.profileservice.controller;
 
 import dokcerdevlink.profileservice.dto.MyProfileDto;
 import dokcerdevlink.profileservice.dto.ProfileDto;
-import dokcerdevlink.profileservice.entity.Profile;
 import dokcerdevlink.profileservice.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,18 +21,16 @@ public class ProfileController {
     }
 
     /** 마이페이지 **/
-//    @GetMapping("/api/profile")
-//    public MyProfileDto showMyProfilePage() { //Model model
-////        List<ProfileDto> profileDtos = profileService.showProfile();
-////        model.addAttribute("profileDtos", profileDtos);
-//
-//        Long profileId = 1L;
-//        MyProfileDto myProfileDto = profileService.showMyPageProfile(profileId);
-//        return myProfileDto;
-//    }
+    @GetMapping("/api/myprofile")
+    public MyProfileDto viewMyProfilePage() {
 
-    @PostMapping("/api/profile")
-    public MyProfileDto editMyProfile(@RequestBody HashMap<String, Object> jsonObject) {
+        Long profileId = 1L; // 테스트용
+        MyProfileDto myProfileDto = profileService.getMyPageProfile(profileId);
+        return myProfileDto;
+    }
+
+    @PostMapping("/api/myprofile")
+    public MyProfileDto editMyProfile(@RequestBody HashMap<String, Object> jsonObject, @RequestHeader("userUuid") String userUuid) {
         MyProfileDto myProfileDto = convertJsonToMyProfileDto(jsonObject);
         profileService.saveMyProfile(myProfileDto);
         return myProfileDto;
@@ -44,7 +38,6 @@ public class ProfileController {
 
     @GetMapping("/api/profile")
     public ProfileDto viewProfilePage(@RequestParam("profileUuid") String profileUuid, @RequestHeader("userUuid") String userUuid) {
-//        ProfileDto profileDto = profileService.getProfileByProfileUuid(profileUuid);
         ProfileDto profileDto = profileService.getProfileByProfileAndUserUuid(profileUuid, userUuid);
         return profileDto;
     }
@@ -53,6 +46,13 @@ public class ProfileController {
     public List<ProfileDto> viewProfilePage(@RequestParam("keyword") String listKeyword) {
         List<ProfileDto> profileListByKeyword = profileService.getProfileListByKeyword(listKeyword);
         return profileListByKeyword;
+    }
+
+    @DeleteMapping("/api/myprofile")
+    public String deleteMyProfile(@RequestParam("profileUuid") String profileUuid, @RequestHeader("userUuid") String userUuid) {
+//        Long profileId = 1L;
+        profileService.deleteProfileByProfileAndUserUuid(profileUuid, userUuid);
+        return "Delete success.";
     }
 
     private static MyProfileDto convertJsonToMyProfileDto(HashMap<String, Object> jsonObject) {
