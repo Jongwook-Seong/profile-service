@@ -20,7 +20,7 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    /** 마이페이지 **/
+    /** 마이프로필 조회 **/
     @GetMapping("/api/myprofile")
     public MyProfileDto viewMyProfilePage() {
 
@@ -29,6 +29,7 @@ public class ProfileController {
         return myProfileDto;
     }
 
+    /** 마이프로필 편집 **/
     @PostMapping("/api/myprofile")
     public MyProfileDto editMyProfile(@RequestBody HashMap<String, Object> jsonObject, @RequestHeader("userUuid") String userUuid) {
         MyProfileDto myProfileDto = convertJsonToMyProfileDto(jsonObject);
@@ -36,18 +37,21 @@ public class ProfileController {
         return myProfileDto;
     }
 
+    /** 프로필(타유저) 조회 **/
     @GetMapping("/api/profile")
     public ProfileDto viewProfilePage(@RequestParam("profileUuid") String profileUuid, @RequestHeader("userUuid") String userUuid) {
         ProfileDto profileDto = profileService.getProfileByProfileAndUserUuid(profileUuid, userUuid);
         return profileDto;
     }
 
+    /** 프로필 리스트(검색) 조회 **/
     @GetMapping("/api/profile/list")
     public List<ProfileDto> viewProfilePage(@RequestParam("keyword") String listKeyword) {
         List<ProfileDto> profileListByKeyword = profileService.getProfileListByKeyword(listKeyword);
         return profileListByKeyword;
     }
 
+    /** 마이프로필 삭제 **/
     @DeleteMapping("/api/myprofile")
     public String deleteMyProfile(@RequestParam("profileUuid") String profileUuid, @RequestHeader("userUuid") String userUuid) {
 //        Long profileId = 1L;

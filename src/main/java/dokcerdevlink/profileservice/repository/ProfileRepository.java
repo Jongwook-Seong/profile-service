@@ -13,8 +13,6 @@ import java.util.List;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
-    public Profile findByNickname(String nickname);
-
     @Query("select new dokcerdevlink.profileservice.dto.ProfileDto(p.id, p.nickname) from Profile p")
     ProfileDto findProfileDtoById(Long id);
 
